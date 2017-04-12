@@ -9,7 +9,7 @@ function handle_version() {
 
     local baseDir=${baseDir}/${version}
 
-    docker build -t pretzlaw/${namespace}:${version} ${baseDir}
+    docker build -qt pretzlaw/${namespace}:${version} ${baseDir}
     docker push  pretzlaw/${namespace}:${version}
 }
 
@@ -33,8 +33,13 @@ function handle_namespace() {
     done
 }
 
+if [[ ! -z $1 ]]; then
+    handle_namespace $1
+    exit $?
+fi
+
 # Build
-for D in ${order}; do
+for D in ${order[@]}; do
 
     if [[ ! -d ${baseDir}/${D} ]]; then
         continue
